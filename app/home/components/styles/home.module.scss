@@ -1,0 +1,35 @@
+$header-color: #fff;
+$header-color-deep: #eee;
+
+.navctn {
+    overflow: auto;
+    height: 100vh;
+    width: 256px;
+    position: fixed;
+    left: 0;
+    top: 50px;
+    bottom: 0;
+    padding-top: 30px;
+}
+
+.bodyctn {
+    overflow: auto;
+    height: 100vh;
+    width: calc(100vw - 256px);
+    position: fixed;
+    left: 256px;
+    top: 50px;
+}
+
+.contentctn {
+    position: absolute;
+    width: 94%;
+    margin-left: 3%;
+
+    .title {
+        font-size: 25px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        margin-top: 30px;
+    }
+}

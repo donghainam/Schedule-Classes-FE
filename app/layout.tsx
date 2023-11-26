@@ -14,7 +14,7 @@ export default function RootLayout(props: React.PropsWithChildren) {
 
           <footer className={styles.footer}>
           </footer>
-          <ToastContainer />
+          <ToastContainer autoClose={500} />
         </body>
       </html>
     </Providers>

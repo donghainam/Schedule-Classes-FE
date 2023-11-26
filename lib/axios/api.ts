@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const HOST_API = "https://sos.joosdigital.com/api";
+export const HOST_API = "http://localhost:8080/api";
 
 const handelError = (error: any) => {
     if (error.response) {

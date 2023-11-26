@@ -10,15 +10,9 @@ import { toast } from 'react-toastify';
 export const HomeNotLogin = () => {
     const dispatch = useDispatch();
     const onFinish = async (data: any) => {
-        toast.success("Get data successfully");
         const newData = { ...data, username: data.username.trim() };
         console.log('Success:', data);
         dispatch(signInThunk(newData))
-    };
-
-    const onFinishFailed = (errorInfo: any) => {
-        // TODO: handle logic
-        console.log('Failed:', errorInfo);
     };
 
     type IAuthSignin = {
@@ -45,7 +39,6 @@ export const HomeNotLogin = () => {
                     <Form
                         initialValues={{ remember: true }}
                         onFinish={onFinish}
-                        onFinishFailed={onFinishFailed}
                         autoComplete="off"
                     >
                         <Form.Item<IAuthSignin>

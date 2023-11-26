@@ -1,5 +1,5 @@
 /* Components */
-import RootLayoutComponent from './components/layouts/RootLayoutComponent'
+import RootLayoutComponent from "./home/page"
 
 export default function HomePage() {
   return (

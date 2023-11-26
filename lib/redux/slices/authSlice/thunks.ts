@@ -48,7 +48,6 @@ export const signInThunk = createAsyncThunk(
             toast.error("Wrong account information or password");
             return thunkAPI.rejectWithValue(error);
         } finally {
-            // dispatch(offAppLoading())
             thunkAPI.dispatch(authSlice.actions.offAppLoading());
         }
     }

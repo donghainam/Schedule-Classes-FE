@@ -1,0 +1,69 @@
+$header-color: #fff;
+$header-color-deep: #666;
+$text-div-color: #000;
+
+
+.container {
+    overflow: auto;
+    width: 100vw;
+    height: 50px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: $header-color;
+    box-shadow: 3px 1px 15px 0.5px #aaa;
+    transition: top 0.5s;
+    z-index: 1000;
+
+    .mgcontainer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 93%;
+        margin-left: 3%;
+
+        .appName {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+
+            .brandLogo {
+                display: inline-block;
+
+                img {
+                    height: 40px;
+                    width: auto;
+                    margin-top: 5px;
+                }
+            }
+
+            .brandTitle {
+                margin-left: 10px;
+                color: $text-div-color;
+                font-weight: bold;
+                font-size: 20px;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+        }
+
+
+        .account {
+            cursor: pointer;
+
+            .dropdown {
+                color: $text-div-color;
+                font-size: 15px;
+
+                &:hover .anticon {
+                    transition: all 0.3s;
+                    color: $header-color-deep;
+                }
+
+                &:hover {
+                    transition: all 0.3s;
+                    color: $header-color-deep !important;
+                }
+            }
+        }
+    }
+}
