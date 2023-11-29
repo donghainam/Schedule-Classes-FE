@@ -1,12 +1,9 @@
-'use client'
-
-import React, { useEffect, useState } from "react";
 import { CodeOutlined, HomeOutlined, ReadOutlined, SettingOutlined } from "@ant-design/icons";
 import { Menu, MenuProps } from "antd";
-import styles from "./styles/home.module.scss";
-import ClassesPage from "@/app/classes/page";
-import ClassroomPage from "@/app/classroom/page";
-import HomeContent from "./homeContent";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
+import styles from "./styles/navbar.module.scss"
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -29,45 +26,42 @@ const items: MenuItem[] = [
     getItem('Subject', 'navmenu2', <ReadOutlined />),
     getItem('Classroom', 'navmenu3', <CodeOutlined />),
     getItem('Navigation Three', 'sub2', <SettingOutlined />, [
-        getItem('Option 7', '7'),
         getItem('Option 8', '8'),
         getItem('Option 9', '9'),
         getItem('Option 10', '10'),
     ]),
 ];
 
-const HomeBody = () => {
-    const [selectedMenuItem, setSelectedMenuItem] = useState('navmenu1');
-    const [content, setContent] = useState(<HomeContent />);
+interface IProps {
+    menuItem: string;
+}
+
+const NavbarMenu = (props: IProps) => {
+    const router = useRouter();
+    const [selectedMenuItem, setSelectedMenuItem] = useState(props.menuItem);
+
     useEffect(() => {
         if (selectedMenuItem === 'navmenu2') {
-            setContent(<ClassesPage />);
-            setSelectedMenuItem('navmenu2');
+            router.push("/classes");
         } else if (selectedMenuItem === 'navmenu3') {
-            setContent(<ClassroomPage />);
-            setSelectedMenuItem('navmenu3');
+            router.push("/classroom");
         } else {
-            setContent(<HomeContent />);
-            setSelectedMenuItem('navmenu1');
+            router.push("/");
         }
     }, [selectedMenuItem]);
+
     return (
         <>
             <Menu
                 style={{ width: 256 }}
-                defaultSelectedKeys={['navmenu1']}
-                defaultOpenKeys={['sub1']}
+                defaultSelectedKeys={[props.menuItem]}
                 mode={('inline')}
                 items={items}
                 onSelect={(e) => setSelectedMenuItem(e.key)}
                 className={styles.navctn}
             />
-            <div className={styles.bodyctn}>
-                {content}
-            </div>
-
         </>
     )
 }
 
-export default HomeBody;
+export default NavbarMenu;

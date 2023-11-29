@@ -9,6 +9,7 @@ export default function RootLayout(props: React.PropsWithChildren) {
   return (
     <Providers>
       <html lang="en">
+        <title>Schedule</title>
         <body>
           <main className={styles.main}>{props.children}</main>
 

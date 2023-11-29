@@ -8,7 +8,6 @@ import {
     useSelector
 } from "@/lib/redux";
 import { useEffect } from "react";
-import HomeNotLogin from "../components/home/homeNotLogin";
 import Header from "./components/Header";
 import HomeBody from "./components/homeBody";
 import Link from "next/link";
@@ -23,15 +22,15 @@ const RootLayoutComponent = () => {
         dispatch(infoUserAuth(""))
     }, [dispatch]);
 
-    // useEffect(() => {
-    //     if (!localStorage.getItem("token") && !sessionStorage.getItem("token")) {
-    //         <Link href="/" />
-    //     }
-    // }, [localStorage.getItem("token"), sessionStorage.getItem("token")]);
+    useEffect(() => {
+        if (!localStorage.getItem("token") && !sessionStorage.getItem("token")) {
+            <Link href="/" ></Link>
+        }
+    }, [localStorage.getItem("token"), sessionStorage.getItem("token")]);
 
-    if (!isAuth) {
-        return <HomeNotLogin />
-    }
+    // if (!isAuth) {
+    //     return <HomeNotLogin />
+    // }
 
     return (
         <>

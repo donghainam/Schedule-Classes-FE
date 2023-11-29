@@ -2,8 +2,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IAuthSignin, IGetAccountInfo } from "./model";
 import { ReduxState, useDispatch } from "../../store";
 import { accountApi, signInApi } from "./api";
-import { authSlice } from "../..";
 import { toast } from "react-toastify";
+import { authSlice } from "./authSlice";
 
 export const infoUserAuth = createAsyncThunk<
     IGetAccountInfo,

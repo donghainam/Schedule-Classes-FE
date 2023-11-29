@@ -11,7 +11,6 @@ export const HomeNotLogin = () => {
     const dispatch = useDispatch();
     const onFinish = async (data: any) => {
         const newData = { ...data, username: data.username.trim() };
-        console.log('Success:', data);
         dispatch(signInThunk(newData))
     };
 
@@ -61,11 +60,11 @@ export const HomeNotLogin = () => {
                             />
                         </Form.Item>
                         <Form.Item>
-                            <Space size={10}>
-                                <Form.Item name="remember" valuePropName="checked">
+                            <Space size={80}>
+                                <Form.Item name="remember" valuePropName="checked" noStyle>
                                     <Checkbox>Remember me</Checkbox>
                                 </Form.Item>
-                                <Button type="link">Forgot password?</Button>
+                                <Button type="link">Forgot password</Button>
                             </Space>
                         </Form.Item>
                         <Form.Item

@@ -151,3 +151,43 @@ export const deleteService = async (url: string, body?: any) => {
         throw JSON.stringify(error);
     }
 };
+
+export const getServicePagination = async <T>(
+    url: string,
+    params?: any
+): Promise<{ data: T; total: number }> => {
+    try {
+        const localToken = localStorage.getItem("token");
+        const sessionToken = sessionStorage.getItem("token");
+
+        const headers = {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            ...(localToken || sessionToken
+                ? {
+                    Authorization: "Bearer " + (localToken || sessionToken),
+                }
+                : {}),
+        };
+
+        let queryString = "";
+        if (params) {
+            queryString = `?${Object.keys(params)
+                .map((key) => `${key}=${params[key] || ""}`)
+                .join("&")}`;
+        }
+        const response = await axios.get(
+            `${HOST_API}${url}${encodeURI(queryString)}`,
+            {
+                headers,
+                withCredentials: true,
+            }
+        );
+        if (response.status >= 200 && response.status <= 210) {
+            return { data: response.data, total: response.headers["x-total-count"] };
+        }
+        throw `Some thing went wrong`;
+    } catch (error: any) {
+        throw handelError(error);
+    }
+};
