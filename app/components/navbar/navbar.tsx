@@ -25,11 +25,6 @@ const items: MenuItem[] = [
     getItem('Home', 'navmenu1', <HomeOutlined />),
     getItem('Subject', 'navmenu2', <ReadOutlined />),
     getItem('Classroom', 'navmenu3', <CodeOutlined />),
-    getItem('Navigation Three', 'sub2', <SettingOutlined />, [
-        getItem('Option 8', '8'),
-        getItem('Option 9', '9'),
-        getItem('Option 10', '10'),
-    ]),
 ];
 
 interface IProps {
@@ -53,7 +48,6 @@ const NavbarMenu = (props: IProps) => {
     return (
         <>
             <Menu
-                style={{ width: 256 }}
                 defaultSelectedKeys={[props.menuItem]}
                 mode={('inline')}
                 items={items}
