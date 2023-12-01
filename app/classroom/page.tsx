@@ -180,7 +180,7 @@ const ClassroomPage = () => {
                                 showSizeChanger: true,
                                 onChange: (numPage, numPageSize) => handlePageChange(numPage, numPageSize),
                             }}
-                            scroll={{ y: 300 }}
+                            scroll={{ y: 500 }}
                             rowKey={record => "classroom_" + record.id}
                         >
                             <Column title="ID"
