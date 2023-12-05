@@ -3,7 +3,7 @@
 import Header from "../home/components/Header";
 import styles from "./styles/classes.module.scss"
 import NavbarMenu from "../components/navbar/navbar";
-import { Button, Form, Image, Input, Modal, Space, Table } from "antd";
+import { Button, Form, Image, Input, InputNumber, Modal, Select, Space, Table } from "antd";
 import { useEffect, useState } from "react";
 import { DownloadOutlined } from "@ant-design/icons";
 import { SearchProps } from "antd/es/input";
@@ -12,17 +12,23 @@ import { getAllSubjectThunk, selectSubject } from "@/lib/redux/slices/subjectSli
 import Column from "antd/es/table/Column";
 import { toast } from "react-toastify";
 import { ISubjectInputType, ISubjectOutputType } from "@/lib/redux/slices/subjectSlice/model";
-import { getDetailSubject } from "@/lib/redux/slices/subjectSlice/api";
+import { createSubject, deleteSubject, editSubject, getDetailSubject } from "@/lib/redux/slices/subjectSlice/api";
 
 const { Search } = Input;
 
 const ClassesPage = () => {
     const dispatch = useDispatch();
     const useAppSelector = useSelector(selectSubject);
+    // const checkAuth = useSelector(selectAuth);
+    // const isAuth = checkAuth.isAuth;
+
+    // if (!isAuth) {
+    //     return <HomeNotLogin />;
+    // }
 
     // Pagination
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(10);
+    const [size, setSize] = useState(20);
     const [totalSubject, setTotalSubject] = useState(0);
     const handlePageChange = (numberPage: number, numberPageSize: number) => {
         setPage(numberPage - 1);
@@ -33,21 +39,20 @@ const ClassesPage = () => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [createSubjectForm] = Form.useForm();
     const onFormSubjectCreateFinish = async (data: any) => {
-        toast.success("create new subject");
-        // try {
-        //     await createClassroom(data);
-        //     toast.success("Create new classroom success");
-        // } catch (error) {
-        //     toast.error(String(error));
-        // } finally {
-        //     dispatch(getAllClassroomThunk({
-        //         page: String(page),
-        //         size: size,
-        //         sort: ["id", "desc"],
-        //         name: filterStringify || "",
-        //     }));
-        //     setIsCreateModalOpen(false);
-        // }
+        try {
+            await createSubject(data);
+            toast.success("Create new subject success");
+        } catch (error) {
+            toast.error(String(error));
+        } finally {
+            dispatch(getAllSubjectThunk({
+                page: String(page),
+                size: size,
+                sort: ["id", "desc"],
+                name: filterStringify || "",
+            }));
+            setIsCreateModalOpen(false);
+        }
     }
     const handleCreateModalCancel = () => {
         setIsCreateModalOpen(false);
@@ -75,36 +80,56 @@ const ClassesPage = () => {
     /***************** Edit *****************/
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editSubjectForm] = Form.useForm();
-    const [editClassroomDetail, setEditClassroomDetail] = useState<ISubjectOutputType>();
+    const [editSubjectDetail, setEditSubjectDetail] = useState<ISubjectOutputType>();
     const handleEditModalCancel = () => {
         setIsEditModalOpen(false);
     }
     const handleEditOnclick = (data: any) => {
-        toast.success("Click edit button");
         setIsEditModalOpen(true);
-        // setEditClassroomDetail(data);
+        setEditSubjectDetail(data);
     }
     const onFormEditFinish = async (data: any) => {
-        toast.success("Edit success!!");
-        // try {
-        //     await editClassroom(editClassroomDetail?.id, data);
-        //     toast.success("A classroom is updated");
-        // } catch (error) {
-        //     toast.error(String(error));
-        // } finally {
-        //     dispatch(getAllClassroomThunk({
-        //         page: String(page),
-        //         size: size,
-        //         sort: ["id", "desc"],
-        //         name: filterStringify || "",
-        //     }));
-        //     setIsEditModalOpen(false);
-        // }
+        try {
+            await editSubject(editSubjectDetail?.id, data);
+            toast.success("A subject is updated");
+        } catch (error) {
+            toast.error(String(error));
+        } finally {
+            dispatch(getAllSubjectThunk({
+                page: String(page),
+                size: size,
+                sort: ["id", "desc"],
+                name: filterStringify || "",
+            }));
+            setIsEditModalOpen(false);
+        }
     }
 
     /***************** Delete *****************/
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deleteSubjectDetail, setDeleteSubjectDetail] = useState<ISubjectOutputType>();
+    const handleDeleteModalCancel = () => {
+        setIsDeleteModalOpen(false);
+    }
     const handleDeleteOnclick = (data: any) => {
-        toast.success("Click delete button");
+        setIsDeleteModalOpen(true);
+        setDeleteSubjectDetail(data);
+    }
+    const handleDeleteOk = async () => {
+        try {
+            await deleteSubject(Number(deleteSubjectDetail?.id));
+            toast.success("Delete successfully!");
+        } catch (error) {
+            toast.error(String(error));
+        } finally {
+            dispatch(getAllSubjectThunk({
+                page: String(page),
+                size: size,
+                sort: ["id", "desc"],
+                name: filterStringify || "",
+            }));
+            setIsDeleteModalOpen(false);
+        }
     }
 
     const [visible, setVisible] = useState(false);
@@ -183,6 +208,7 @@ const ClassesPage = () => {
                                 width={80}
                                 render={(id: number) =>
                                     <a onClick={() => handleGetOnclick(id)}>{id}</a>} />
+                            <Column title="Semester" dataIndex="semester" key="semester" width={100} />
                             <Column title="Department name" dataIndex="departmentName" key="departmentName" width={150} />
                             <Column title="Course ID" dataIndex="courseCode" key="courseCode" width={100} />
                             <Column title="Course name" dataIndex="name" key="name" width={200} />
@@ -221,28 +247,103 @@ const ClassesPage = () => {
                 onOk={createSubjectForm.submit}
                 onCancel={handleCreateModalCancel}
             >
+                <div className={styles.modalTitle}>Create subject</div>
                 <Form
                     form={createSubjectForm}
-                    initialValues={{ remember: true }}
                     onFinish={onFormSubjectCreateFinish}
                     autoComplete="off"
                 >
-                    <h3>Name classroom</h3>
-                    <Form.Item<ISubjectInputType>
-                        className={styles.formInput}
-                        name="name"
-                        rules={[{ required: true, message: 'This field is required!' }]}
-                    >
-                        <Input size="large" placeholder="Name classroom" />
-                    </Form.Item>
-                    <h3>Max student</h3>
-                    <Form.Item<ISubjectInputType>
-                        className={styles.formInput}
-                        name="maxSv"
-                        rules={[{ required: true, message: 'This field is required!' }]}
-                    >
-                        <Input size='large' placeholder="Max student" />
-                    </Form.Item>
+                    <div className={styles.containerField}>
+                        <div className={styles.titleField}>Semester:</div>
+                        <Form.Item<ISubjectInputType>
+                            className={styles.formInput}
+                            name="semester"
+                            rules={[{ required: true, message: 'Please input semester!' }]}
+                        >
+                            <Input size='large' placeholder="Semester" />
+                        </Form.Item>
+                    </div>
+                    <div className={styles.containerField}>
+                        <div className={styles.titleField}>Subject name:</div>
+                        <Form.Item<ISubjectInputType>
+                            className={styles.formInput}
+                            name="name"
+                            rules={[{ required: true, message: 'Please input subject name!' }]}
+                        >
+                            <Input size="large" placeholder="Subject name" />
+                        </Form.Item>
+                    </div>
+                    <div className={styles.containerField}>
+                        <div className={styles.titleField}>Note:</div>
+                        <Form.Item<ISubjectInputType>
+                            className={styles.formInput}
+                            name="classNote"
+                            rules={[{ required: true, message: 'Please input subject note!' }]}
+                        >
+                            <Input size='large' placeholder="Note" />
+                        </Form.Item>
+                    </div>
+                    <div className={styles.containerField}>
+                        <div className={styles.titleField}>Subject code:</div>
+                        <Form.Item<ISubjectInputType>
+                            className={styles.formInput}
+                            name="courseCode"
+                            rules={[{ required: true, message: 'Please input subject code!' }]}
+                        >
+                            <Input size='large' placeholder="Subject code" />
+                        </Form.Item>
+                    </div>
+                    <div className={styles.justifyField}>
+                        <div className={styles.containerField}>
+                            <div className={styles.titleField}>Start week:</div>
+                            <Form.Item<ISubjectInputType>
+                                name="startWeek"
+                                initialValue={1}
+                            >
+                                <InputNumber min={1} max={53} defaultValue={1} className={styles.inputNumberField} />
+                            </Form.Item>
+                        </div>
+                        <div className={styles.containerField}>
+                            <div className={styles.titleField}>Total number of lesson:</div>
+                            <Form.Item<ISubjectInputType>
+                                name="totalNumberOfLessons"
+                                initialValue={15}
+                            >
+                                <InputNumber min={1} defaultValue={15} className={styles.inputNumberField} />
+                            </Form.Item>
+                        </div>
+                    </div>
+
+                    <div className={styles.justifyField}>
+                        <div className={styles.containerField}>
+                            <div className={styles.titleField}>Conditions:</div>
+                            <Form.Item<ISubjectInputType>
+                                name="conditions"
+                                initialValue={1}
+                            >
+                                <InputNumber min={1} max={5} defaultValue={1} className={styles.inputNumberField} />
+                            </Form.Item>
+                        </div>
+                        <div className={styles.containerField}>
+                            <div className={styles.titleField}>Number of lesson:</div>
+                            <Form.Item<ISubjectInputType>
+                                name="numberOfLessons"
+                                initialValue={3}
+                            >
+                                <InputNumber min={1} max={6} defaultValue={3} className={styles.inputNumberField} />
+                            </Form.Item>
+                        </div>
+                    </div>
+
+                    <div className={styles.containerField}>
+                        <div className={styles.titleField}>Department:</div>
+                        <Form.Item<ISubjectInputType>
+                            className={styles.formInput}
+                            name="departmentName"
+                        >
+                            <Input size='large' placeholder="Department name" />
+                        </Form.Item>
+                    </div>
                 </Form>
             </Modal>
             <Modal
@@ -251,11 +352,17 @@ const ClassesPage = () => {
                 footer={false}
                 className={styles.modalDetailClassroom}
             >
-                <h2>Classroom infomation</h2>
+                <h2>Subject infomation</h2>
                 {isDetailModalOpen && subjectDetail && (
                     <div>
-                        <p className={styles.textContent}> Name: {subjectDetail.name}</p>
-                        <p className={styles.textContent}> Max number of students: {subjectDetail.classNote}</p>
+                        <p className={styles.textContent}><div className={styles.detailModalTitle}>Semester: </div>{subjectDetail.semester}</p>
+                        <p className={styles.textContent}><div className={styles.detailModalTitle}>Department name: </div>{subjectDetail.departmentName}</p>
+                        <p className={styles.textContent}><div className={styles.detailModalTitle}>Subject id: </div>{subjectDetail.courseCode}</p>
+                        <p className={styles.textContent}><div className={styles.detailModalTitle}>Subject name: </div>{subjectDetail.name}</p>
+                        <p className={styles.textContent}><div className={styles.detailModalTitle}>Class: </div>{subjectDetail.classNote}</p>
+                        <p className={styles.textContent}><div className={styles.detailModalTitle}>Start week: </div>{subjectDetail.startWeek}</p>
+                        <p className={styles.textContent}><div className={styles.detailModalTitle}>Number of lesson: </div>{subjectDetail.numberOfLessons}</p>
+                        <p className={styles.textContent}><div className={styles.detailModalTitle}>Number of week study: </div>{subjectDetail.numberOfWeekStudy}</p>
                     </div>
                 )}
             </Modal>
@@ -264,47 +371,131 @@ const ClassesPage = () => {
                 onOk={editSubjectForm.submit}
                 onCancel={handleEditModalCancel}
             >
-                {isEditModalOpen && editClassroomDetail && (
+                <div className={styles.modalTitle}>Edit subject</div>
+                {isEditModalOpen && editSubjectDetail && (
                     <Form
                         form={editSubjectForm}
                         initialValues={{
-                            name: editClassroomDetail.name,
-                            maxSv: editClassroomDetail.classNote,
+                            semester: editSubjectDetail.semester,
+                            name: editSubjectDetail.name,
+                            classNote: editSubjectDetail.classNote,
+                            courseCode: editSubjectDetail.courseCode,
+                            startWeek: editSubjectDetail.startWeek,
+                            totalNumberOfLessons: editSubjectDetail.numberOfLessons * editSubjectDetail.numberOfWeekStudy,
+                            conditions: editSubjectDetail.conditions,
+                            numberOfLessons: editSubjectDetail.numberOfLessons,
+                            departmentName: editSubjectDetail.departmentName,
                         }}
                         onFinish={onFormEditFinish}
                         autoComplete="off"
                     >
-                        <h3>Name classroom</h3>
-                        <Form.Item<ISubjectInputType>
-                            className={styles.formInput}
-                            name="name"
-                            rules={[{ required: true, message: 'This field is required!' }]}
-                        >
-                            <Input size="large" placeholder="Name classroom" defaultValue={editClassroomDetail.name} />
-                        </Form.Item>
-                        <h3>Max student</h3>
-                        <Form.Item<ISubjectInputType>
-                            className={styles.formInput}
-                            name="maxSv"
-                            rules={[{ required: true, message: 'This field is required!' }]}
-                        >
-                            <Input size='large' placeholder="Max student" defaultValue={editClassroomDetail.id} />
-                        </Form.Item>
+                        <div className={styles.containerField}>
+                            <div className={styles.titleField}>Semester:</div>
+                            <Form.Item<ISubjectInputType>
+                                className={styles.formInput}
+                                name="semester"
+                                rules={[{ required: true, message: 'Please input semester!' }]}
+                            >
+                                <Input size='large' placeholder="Semester" defaultValue={editSubjectDetail.semester} />
+                            </Form.Item>
+                        </div>
+                        <div className={styles.containerField}>
+                            <div className={styles.titleField}>Subject name:</div>
+                            <Form.Item<ISubjectInputType>
+                                className={styles.formInput}
+                                name="name"
+                                rules={[{ required: true, message: 'Please input subject name!' }]}
+                            >
+                                <Input size="large" placeholder="Subject name" defaultValue={editSubjectDetail.name} />
+                            </Form.Item>
+                        </div>
+                        <div className={styles.containerField}>
+                            <div className={styles.titleField}>Note:</div>
+                            <Form.Item<ISubjectInputType>
+                                className={styles.formInput}
+                                name="classNote"
+                                rules={[{ required: true, message: 'Please input subject note!' }]}
+                            >
+                                <Input size='large' placeholder="Note" defaultValue={editSubjectDetail.classNote} />
+                            </Form.Item>
+                        </div>
+                        <div className={styles.containerField}>
+                            <div className={styles.titleField}>Subject code:</div>
+                            <Form.Item<ISubjectInputType>
+                                className={styles.formInput}
+                                name="courseCode"
+                                rules={[{ required: true, message: 'Please input subject code!' }]}
+                            >
+                                <Input size='large' placeholder="Subject code" defaultValue={editSubjectDetail.courseCode} />
+                            </Form.Item>
+                        </div>
+                        <div className={styles.justifyField}>
+                            <div className={styles.containerField}>
+                                <div className={styles.titleField}>Start week:</div>
+                                <Form.Item<ISubjectInputType>
+                                    name="startWeek"
+                                    initialValue={1}
+                                >
+                                    <InputNumber min={1} max={53} defaultValue={editSubjectDetail.startWeek} className={styles.inputNumberField} />
+                                </Form.Item>
+                            </div>
+                            <div className={styles.containerField}>
+                                <div className={styles.titleField}>Total number of lesson:</div>
+                                <Form.Item<ISubjectInputType>
+                                    name="totalNumberOfLessons"
+                                    initialValue={15}
+                                >
+                                    <InputNumber min={1} defaultValue={editSubjectDetail.numberOfLessons * editSubjectDetail.numberOfWeekStudy} className={styles.inputNumberField} />
+                                </Form.Item>
+                            </div>
+                        </div>
+
+                        <div className={styles.justifyField}>
+                            <div className={styles.containerField}>
+                                <div className={styles.titleField}>Conditions:</div>
+                                <Form.Item<ISubjectInputType>
+                                    name="conditions"
+                                    initialValue={1}
+                                >
+                                    <InputNumber min={1} max={5} defaultValue={editSubjectDetail.conditions} className={styles.inputNumberField} />
+                                </Form.Item>
+                            </div>
+                            <div className={styles.containerField}>
+                                <div className={styles.titleField}>Number of lesson:</div>
+                                <Form.Item<ISubjectInputType>
+                                    name="numberOfLessons"
+                                    initialValue={3}
+                                >
+                                    <InputNumber min={1} max={6} defaultValue={editSubjectDetail.numberOfLessons} className={styles.inputNumberField} />
+                                </Form.Item>
+                            </div>
+                        </div>
+
+                        <div className={styles.containerField}>
+                            <div className={styles.titleField}>Department:</div>
+                            <Form.Item<ISubjectInputType>
+                                className={styles.formInput}
+                                name="departmentName"
+                            >
+                                <Input size='large' placeholder="Department name" defaultValue={editSubjectDetail.departmentName} />
+                            </Form.Item>
+                        </div>
                     </Form>
                 )}
             </Modal>
-            {/* <Modal
+            <Modal
                 open={isDeleteModalOpen}
                 onCancel={handleDeleteModalCancel}
                 onOk={handleDeleteOk}
             >
-                <h2>Delete classroom</h2>
-                {isDeleteModalOpen && deleteClassroomDetail && (
+                <h2>Delete subject</h2>
+                {isDeleteModalOpen && deleteSubjectDetail && (
                     <div>
-                        <p className={styles.textContent}>Are you sure you want to delete classroom <b>{deleteClassroomDetail.name}</b>?</p>
+                        <p className={styles.textContent}>Are you sure you want to delete subject
+                            <b>{deleteSubjectDetail.name}</b> of <b>{deleteSubjectDetail.classNote}</b>?</p>
                     </div>
                 )}
-            </Modal> */}
+            </Modal>
         </>
     )
 }

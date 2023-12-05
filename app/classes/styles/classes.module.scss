@@ -35,3 +35,44 @@
         margin-bottom: 50px;
     }
 }
+
+.containerField {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .titleField {
+        margin-bottom: 24px;
+        font-size: 16px;
+        // font-weight: bold;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .formInput {
+        width: 350px;
+    }
+
+    .inputNumberField {
+        width: 60px;
+        margin-left: 20px;
+    }
+}
+
+.justifyField {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modalTitle {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.detailModalTitle {
+    width: 180px;
+    display: inline-block;
+}

@@ -1,7 +1,9 @@
 import {
+  deleteService,
   getService,
   getServicePagination,
-  postService
+  postService,
+  putService
 } from "@/lib/axios/api";
 import { ISubjectInputType, ISubjectOutputType } from "./model";
 import { PaginationRequest } from "../appSlice/model";
@@ -9,7 +11,7 @@ import { PaginationRequest } from "../appSlice/model";
 export const createSubject = (
   data: ISubjectInputType
 ) => {
-  return postService("/classes", data);
+  return postService("/classes/create", data);
 };
 
 export const getDetailSubject = (
@@ -33,4 +35,15 @@ export const getSubject = ({
     sort,
     ...(!!name && { name }),
   });
+};
+
+export const editSubject = (
+  id?: number,
+  classroom?: ISubjectOutputType
+) => {
+  return putService(`/classes/${id}`, classroom);
+};
+
+export const deleteSubject = (id: number) => {
+  return deleteService(`/classes/${id}`);
 };

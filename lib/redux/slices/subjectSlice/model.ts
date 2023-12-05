@@ -23,5 +23,12 @@ export interface ISubjectState {
 
 export interface ISubjectInputType {
     name: string;
-    maxSv: number;
+    classNote: string;
+    courseCode: string;
+    startWeek: number;
+    numberOfLessons: number;
+    totalNumberOfLessons: number;
+    semester: string;
+    conditions: number;
+    departmentName: string;
 }

@@ -222,7 +222,6 @@ const ClassroomPage = () => {
             >
                 <Form
                     form={createClassroomForm}
-                    initialValues={{ remember: true }}
                     onFinish={onFormCreateFinish}
                     autoComplete="off"
                 >
