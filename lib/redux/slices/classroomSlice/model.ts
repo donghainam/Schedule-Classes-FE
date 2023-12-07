@@ -17,3 +17,7 @@ export interface IClassroomInputType {
     name: string;
     maxSv: number;
 }
+
+export interface INumberOfClassroom {
+    num: number;
+}

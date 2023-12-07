@@ -21,6 +21,10 @@
         padding: 10px;
         background-color: #eee;
         border-radius: 10px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
     .searchandcreate {

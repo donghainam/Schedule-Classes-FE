@@ -1,11 +1,13 @@
 import {
   deleteService,
+  downloadService,
   getService,
   getServicePagination,
+  importService,
   postService,
   putService
 } from "@/lib/axios/api";
-import { ISubjectInputType, ISubjectOutputType } from "./model";
+import { INumberOfSubject, ISubjectInputType, ISubjectOutputType } from "./model";
 import { PaginationRequest } from "../appSlice/model";
 
 export const createSubject = (
@@ -37,6 +39,10 @@ export const getSubject = ({
   });
 };
 
+export const getNumSubject = (): Promise<INumberOfSubject> => {
+  return getService("/classes/number-of-classes");
+}
+
 export const editSubject = (
   id?: number,
   classroom?: ISubjectOutputType
@@ -47,3 +53,11 @@ export const editSubject = (
 export const deleteSubject = (id: number) => {
   return deleteService(`/classes/${id}`);
 };
+
+export const getTemplate = () => {
+  return downloadService("/classes/template");
+}
+
+export const postExcel = (data: any) => {
+  return importService("/classes/import", data);
+}

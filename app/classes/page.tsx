@@ -3,16 +3,16 @@
 import Header from "../home/components/Header";
 import styles from "./styles/classes.module.scss"
 import NavbarMenu from "../components/navbar/navbar";
-import { Button, Form, Image, Input, InputNumber, Modal, Select, Space, Table } from "antd";
+import { Button, Form, Image, Input, InputNumber, Modal, Select, Space, Spin, Table, Upload, UploadProps } from "antd";
 import { useEffect, useState } from "react";
-import { DownloadOutlined } from "@ant-design/icons";
+import { DownloadOutlined, UploadOutlined } from "@ant-design/icons";
 import { SearchProps } from "antd/es/input";
 import { useDispatch, useSelector } from "@/lib/redux";
 import { getAllSubjectThunk, selectSubject } from "@/lib/redux/slices/subjectSlice";
 import Column from "antd/es/table/Column";
 import { toast } from "react-toastify";
 import { ISubjectInputType, ISubjectOutputType } from "@/lib/redux/slices/subjectSlice/model";
-import { createSubject, deleteSubject, editSubject, getDetailSubject } from "@/lib/redux/slices/subjectSlice/api";
+import { createSubject, deleteSubject, editSubject, getDetailSubject, getTemplate, postExcel } from "@/lib/redux/slices/subjectSlice/api";
 
 const { Search } = Input;
 
@@ -132,12 +132,43 @@ const ClassesPage = () => {
         }
     }
 
+    const handleDownloadOnClick = async () => {
+        try {
+            const response = await getTemplate();
+
+            // Create a Blob URL from the response data
+            const blobUrl = URL.createObjectURL(new Blob([response.data]));
+
+            // Create a hidden link and simulate a click to trigger file download
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = 'TemplateImportSubject.xlsx'; // Specify the file name
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+
+            // Clean up - remove the link and revoke the Blob URL after download
+            document.body.removeChild(link);
+            URL.revokeObjectURL(blobUrl);
+        } catch (error) {
+            toast.error(String(error));
+        } finally {
+            dispatch(getAllSubjectThunk({
+                page: String(page),
+                size: size,
+                sort: ["id", "desc"],
+                name: filterStringify || "",
+            }));
+            setIsDeleteModalOpen(false);
+        }
+    }
+
     const [visible, setVisible] = useState(false);
     const [filterStringify, setFilterStringify] = useState("");
 
     const onSearch: SearchProps['onSearch'] = (value, _e) => {
-        setFilterStringify(value);
         setPage(0);
+        setFilterStringify(value);
     };
 
     useEffect(() => {
@@ -153,6 +184,24 @@ const ClassesPage = () => {
         setPage(useAppSelector.page);
     }, [useAppSelector.totalSubject, useAppSelector.page]);
 
+    // Handle upload
+    const uploadChanged = async (data: any) => {
+        try {
+            const response = await postExcel(data);
+            toast.success("Import data successfully!");
+            console.log('Tải lên thành công:', response);
+        } catch (error) {
+            toast.error(String(error));
+        } finally {
+            dispatch(getAllSubjectThunk({
+                page: String(page),
+                size: size,
+                sort: ["id", "desc"],
+                name: filterStringify || "",
+            }));
+        }
+    };
+
     return (
         <>
             <Header />
@@ -162,22 +211,42 @@ const ClassesPage = () => {
                     <h2>Subject</h2>
 
                     <div className={styles.templateImport}>
-                        <Button type="link" size="large" onClick={() => setVisible(true)}>
-                            Template import subjects
-                        </Button>
-                        <Button type="primary" icon={<DownloadOutlined />} size="large" >Download</Button>
-                        <Image
-                            width={200}
-                            style={{ display: 'none' }}
-                            src="/images/templateImport.png"
-                            preview={{
-                                visible,
-                                src: '/images/templateImport.png',
-                                onVisibleChange: (value) => {
-                                    setVisible(value);
-                                },
-                            }}
-                        />
+                        <div>
+                            <Button type="link" size="large" onClick={() => setVisible(true)}>
+                                Template import subjects
+                            </Button>
+                            <Button
+                                type="primary"
+                                icon={<DownloadOutlined />}
+                                size="large"
+                                onClick={handleDownloadOnClick}
+                            >Download</Button>
+                            <Image
+                                width={200}
+                                style={{ display: 'none' }}
+                                src="/images/templateImport.png"
+                                preview={{
+                                    visible,
+                                    src: '/images/templateImport.png',
+                                    onVisibleChange: (value) => {
+                                        setVisible(value);
+                                    },
+                                }}
+                            />
+                        </div>
+                        <Upload
+                            name="file"
+                            accept=".xls, .xlsx"
+                            beforeUpload={() => false}
+                            onChange={e => uploadChanged(e)}
+                            showUploadList={false}
+                        >
+                            <Button
+                                type="primary"
+                                icon={<UploadOutlined />}
+                                size="large"
+                            >Import</Button>
+                        </Upload>
                     </div>
                     <div className={styles.searchandcreate}>
                         <Search placeholder="Name" size="large" onSearch={onSearch} style={{ width: 300 }} />
@@ -491,8 +560,7 @@ const ClassesPage = () => {
                 <h2>Delete subject</h2>
                 {isDeleteModalOpen && deleteSubjectDetail && (
                     <div>
-                        <p className={styles.textContent}>Are you sure you want to delete subject
-                            <b>{deleteSubjectDetail.name}</b> of <b>{deleteSubjectDetail.classNote}</b>?</p>
+                        <p className={styles.textContent}>Are you sure you want to delete subject <b>{deleteSubjectDetail.name}</b> of <b>{deleteSubjectDetail.classNote}</b>?</p>
                     </div>
                 )}
             </Modal>

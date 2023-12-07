@@ -32,3 +32,7 @@ export interface ISubjectInputType {
     conditions: number;
     departmentName: string;
 }
+
+export interface INumberOfSubject {
+    num: number;
+}

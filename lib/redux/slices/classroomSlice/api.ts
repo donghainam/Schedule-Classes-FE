@@ -6,7 +6,7 @@ import {
     putService
 } from "@/lib/axios/api";
 import { PaginationRequest } from "../appSlice/model";
-import { ClassroomOutputType, IClassroomInputType } from "./model";
+import { ClassroomOutputType, IClassroomInputType, INumberOfClassroom } from "./model";
 
 export const createClassroom = ({ name, maxSv }: IClassroomInputType) => {
     return postService("/classroom/create", { name, maxSv });
@@ -34,6 +34,10 @@ export const getClassroom = ({
         ...(!!name && { name }),
     });
 };
+
+export const getNumClassroom = (): Promise<INumberOfClassroom> => {
+    return getService("/classroom/number-of-classroom");
+}
 
 export const editClassroom = (
     id?: number,

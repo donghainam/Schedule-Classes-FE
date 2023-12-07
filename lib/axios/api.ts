@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export const HOST_API = "http://localhost:8080/api";
 
@@ -191,3 +191,63 @@ export const getServicePagination = async <T>(
         throw handelError(error);
     }
 };
+
+export const downloadService = async (url: string) => {
+    try {
+        const localToken = localStorage.getItem("token");
+        const sessionToken = sessionStorage.getItem("token");
+
+        const headers = {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            ...(localToken || sessionToken
+                ? {
+                    Authorization: "Bearer " + (localToken || sessionToken),
+                }
+                : {}),
+        };
+        const response = await axios.get(`${HOST_API}${url}`, {
+            headers,
+            responseType: 'blob', // Set responseType to 'blob' to handle binary data
+        });
+        if (response.status >= 200 && response.status <= 210) {
+            return response;
+        }
+        throw `Some thing went wrong`;
+    } catch (error: any) {
+        throw handelError(error);
+    }
+}
+
+export const importService = async (url: string, data: any) => {
+    const fileList = data.fileList;
+    if (fileList.length === 0) return;
+
+    const formData = new FormData();
+    fileList.forEach((file: any) => {
+        formData.append('file', file.originFileObj);
+    });
+    try {
+        const localToken = localStorage.getItem("token");
+        const sessionToken = sessionStorage.getItem("token");
+
+        const headers = {
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
+            ...(localToken || sessionToken
+                ? {
+                    Authorization: "Bearer " + (localToken || sessionToken),
+                }
+                : {}),
+        };
+        const response = await axios.post(`${HOST_API}${url}`, formData, {
+            headers,
+        });
+        if (response.status >= 200 && response.status <= 210) {
+            return response;
+        }
+        throw `Some thing went wrong`;
+    } catch (error: any) {
+        throw handelError(error);
+    }
+}

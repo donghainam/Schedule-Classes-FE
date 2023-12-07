@@ -14,9 +14,57 @@ $header-color-deep: #eee;
     position: absolute;
     width: 94%;
     margin-left: 3%;
+    font-family: Arial, Helvetica, sans-serif;
 
     h2 {
         margin-top: 30px;
-        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .dashboard {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .boxdetail {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            width: 44%;
+            cursor: pointer;
+
+            &:hover {
+                transition: all 0.3s;
+                background-color: #fafafa !important;
+            }
+
+            .dashboardtitle {
+                font-size: 20px;
+                color: #888;
+            }
+
+            .dahboardicon {
+                margin-top: 20px;
+                font-size: 25px;
+
+                .iconch {
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
+
+    .schedule {
+        margin-top: 30px;
+        border-radius: 10px;
+        padding: 20px;
+        background-color: #eee;
+
+        .scheinput {
+            width: 86px;
+        }
+
+        .schebutton {
+            margin-left: 20px;
+        }
     }
 }

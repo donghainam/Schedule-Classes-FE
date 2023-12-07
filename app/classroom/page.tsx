@@ -15,6 +15,7 @@ import {
     getDetailClassroom
 } from "@/lib/redux/slices/classroomSlice/api";
 import { ClassroomOutputType } from "@/lib/redux/slices/classroomSlice/model";
+import Loading from "../home/components/Loading";
 
 const { Search } = Input;
 const { Column } = Table;
@@ -22,6 +23,7 @@ const { Column } = Table;
 const ClassroomPage = () => {
     const dispatch = useDispatch();
     const useAppSelector = useSelector(selectClassroom);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [filterStringify, setFilterStringify] = useState("");
     const [page, setPage] = useState(0);
@@ -141,6 +143,7 @@ const ClassroomPage = () => {
             sort: ["id", "desc"],
             name: filterStringify || "",
         }));
+        setIsLoading(false);
     }, [dispatch, page, size, filterStringify]);
     useEffect(() => {
         setTotalClassroom(useAppSelector.totalClassroom);
@@ -150,6 +153,10 @@ const ClassroomPage = () => {
     type IInputClassroom = {
         name: string,
         maxSv: number,
+    }
+
+    if (isLoading) {
+        return <Loading />;
     }
 
     return (
