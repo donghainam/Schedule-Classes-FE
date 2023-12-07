@@ -1,9 +1,13 @@
 /* Instruments */
-import { authSlice, classroomSlice, counterSlice } from './slices'
-import { subjectSlice } from './slices/subjectSlice'
+import {
+  authSlice,
+  classroomSlice,
+  appSlice,
+  subjectSlice
+} from './slices'
 
 export const reducer = {
-  counter: counterSlice.reducer,
+  app: appSlice.reducer,
   auth: authSlice.reducer,
   classroom: classroomSlice.reducer,
   subject: subjectSlice.reducer,

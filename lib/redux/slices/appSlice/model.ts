@@ -12,3 +12,8 @@ export type PaginationRequest = {
     keyword?: string;
     isAllOwnList?: boolean;
 };
+
+export interface AppState {
+    loading: boolean;
+    nextPath: string;
+}
