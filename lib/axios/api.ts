@@ -192,7 +192,10 @@ export const getServicePagination = async <T>(
     }
 };
 
-export const downloadService = async (url: string) => {
+export const downloadService = async (
+    url: string,
+    params?: any
+) => {
     try {
         const localToken = localStorage.getItem("token");
         const sessionToken = sessionStorage.getItem("token");
@@ -206,10 +209,21 @@ export const downloadService = async (url: string) => {
                 }
                 : {}),
         };
-        const response = await axios.get(`${HOST_API}${url}`, {
-            headers,
-            responseType: 'blob', // Set responseType to 'blob' to handle binary data
-        });
+
+        let queryString = "";
+        if (params) {
+            queryString = `?${Object.keys(params)
+                .map((key) => `${key}=${params[key] || ""}`)
+                .join("&")}`;
+        }
+
+        const response = await axios.get(
+            `${HOST_API}${url}${encodeURI(queryString)}`,
+            {
+                headers,
+                responseType: 'blob', // Set responseType to 'blob' to handle binary data
+            }
+        );
         if (response.status >= 200 && response.status <= 210) {
             return response;
         }

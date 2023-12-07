@@ -13,11 +13,11 @@ import { getNumClassroom } from "@/lib/redux/slices/classroomSlice/api";
 import { getNumSubject } from "@/lib/redux/slices/subjectSlice/api";
 import { Button, Input } from "antd";
 import { toast } from "react-toastify";
-import { appSlice, selectApp } from "@/lib/redux/slices/appSlice";
 import Loading from "./home/components/Loading";
+import { getSchedule } from "@/lib/redux/slices/scheduleSlice/api";
 
 export default function HomePage() {
-  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const useAppSelector = useSelector(selectAuth);
   const [isNumberClassroom, setIsNumberClassroom] = useState(0);
   useEffect(() => {
@@ -39,11 +39,29 @@ export default function HomePage() {
     setIsSemester(data.target.value);
   }
   const handleScheduleOnClick = async () => {
-    toast.success("Click schedule btn");
-    console.log("CHeck semester: ", isSemester);
-    // try {
-    //   await
-    // }
+    setIsLoading(true);
+    try {
+      const response = await getSchedule(isSemester);
+
+      // Create a Blob URL from the response data
+      const blobUrl = URL.createObjectURL(new Blob([response.data]));
+
+      // Create a hidden link and simulate a click to trigger file download
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = 'Schedule_' + isSemester + '.xlsx'; // Specify the file name
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+
+      // Clean up - remove the link and revoke the Blob URL after download
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      toast.error(String(error));
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   const isAuth = useAppSelector.isAuth;
@@ -54,15 +72,18 @@ export default function HomePage() {
   }
 
   const handleClickClassroomBox = () => {
+    setIsLoading(true);
     router.push("/classroom");
   }
 
   const handleClickSubjectBox = () => {
+    setIsLoading(true);
     router.push("/classes");
   }
 
   return (
     <>
+      <Loading show={isLoading} />
       <Header />
       <NavbarMenu menuItem="navmenu1" />
       <div className={styles.bodyctn}>

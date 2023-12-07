@@ -154,13 +154,9 @@ const ClassroomPage = () => {
         name: string,
         maxSv: number,
     }
-
-    if (isLoading) {
-        return <Loading />;
-    }
-
     return (
         <>
+            <Loading show={isLoading} />
             <Header />
             <NavbarMenu menuItem="navmenu3" />
             <div className={styles.bodyctn}>

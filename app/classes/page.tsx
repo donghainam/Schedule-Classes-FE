@@ -13,12 +13,14 @@ import Column from "antd/es/table/Column";
 import { toast } from "react-toastify";
 import { ISubjectInputType, ISubjectOutputType } from "@/lib/redux/slices/subjectSlice/model";
 import { createSubject, deleteSubject, editSubject, getDetailSubject, getTemplate, postExcel } from "@/lib/redux/slices/subjectSlice/api";
+import Loading from "../home/components/Loading";
 
 const { Search } = Input;
 
 const ClassesPage = () => {
     const dispatch = useDispatch();
     const useAppSelector = useSelector(selectSubject);
+    const [isLoading, setIsLoading] = useState(true);
     // const checkAuth = useSelector(selectAuth);
     // const isAuth = checkAuth.isAuth;
 
@@ -133,6 +135,7 @@ const ClassesPage = () => {
     }
 
     const handleDownloadOnClick = async () => {
+        setIsLoading(true);
         try {
             const response = await getTemplate();
 
@@ -160,6 +163,7 @@ const ClassesPage = () => {
                 name: filterStringify || "",
             }));
             setIsDeleteModalOpen(false);
+            setIsLoading(false);
         }
     }
 
@@ -178,6 +182,7 @@ const ClassesPage = () => {
             sort: ["id", "desc"],
             name: filterStringify || "",
         }));
+        setIsLoading(false);
     }, [dispatch, page, size, filterStringify]);
     useEffect(() => {
         setTotalSubject(useAppSelector.totalSubject);
@@ -186,10 +191,10 @@ const ClassesPage = () => {
 
     // Handle upload
     const uploadChanged = async (data: any) => {
+        setIsLoading(true);
         try {
-            const response = await postExcel(data);
+            await postExcel(data);
             toast.success("Import data successfully!");
-            console.log('Tải lên thành công:', response);
         } catch (error) {
             toast.error(String(error));
         } finally {
@@ -199,11 +204,13 @@ const ClassesPage = () => {
                 sort: ["id", "desc"],
                 name: filterStringify || "",
             }));
+            setIsLoading(false);
         }
     };
 
     return (
         <>
+            <Loading show={isLoading} />
             <Header />
             <NavbarMenu menuItem="navmenu2" />
             <div className={styles.bodyctn}>

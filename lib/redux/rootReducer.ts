@@ -3,7 +3,8 @@ import {
   authSlice,
   classroomSlice,
   appSlice,
-  subjectSlice
+  subjectSlice,
+  scheduleSlice
 } from './slices'
 
 export const reducer = {
@@ -11,4 +12,5 @@ export const reducer = {
   auth: authSlice.reducer,
   classroom: classroomSlice.reducer,
   subject: subjectSlice.reducer,
+  schedule: scheduleSlice.reducer,
 }

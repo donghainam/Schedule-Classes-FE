@@ -1,11 +1,24 @@
-import { Spin } from "antd";
+import { Modal, Spin } from "antd";
 import styles from "./styles/loading.module.scss"
 
-export default function Loading() {
+interface IProps {
+    show: boolean;
+}
+
+const Loading = (props: IProps) => {
     return (
         <>
-            <Spin size="large" className={styles.loadingPage}>
+            <Spin
+                spinning={props.show}
+                size="large"
+                className={styles.loadingPage}
+                tip="Loading: ........"
+                fullscreen
+            >
+                <div className="content" />
             </Spin>
         </>
     )
 }
+
+export default Loading;
