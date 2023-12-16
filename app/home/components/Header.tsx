@@ -17,7 +17,6 @@ import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 const Header = () => {
     const useAppSelector = useSelector(selectAuth);
     const isAuth = useAppSelector.isAuth;
-    const infoUser = useAppSelector.infoUser;
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -26,8 +25,6 @@ const Header = () => {
 
     const logOut = () => {
         dispatch(authSlice.actions.logOutAction());
-        // TODO: handle log out
-        // dispatch(clearOwnListAction());
         toast.success("Logout successfully");
     };
 
@@ -63,7 +60,7 @@ const Header = () => {
                 <div className={styles.mgcontainer}>
                     <div className={styles.appName}>
                         <div className={styles.brandLogo}>
-                            <img src='/images/logo.png' alt='Logo' />
+                            <img src='/images/logo.jpg' alt='Logo' />
                         </div>
                         <span className={styles.brandTitle}>Schedule</span>
                     </div>

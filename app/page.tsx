@@ -21,16 +21,30 @@ export default function HomePage() {
   const useAppSelector = useSelector(selectAuth);
   const [isNumberClassroom, setIsNumberClassroom] = useState(0);
   useEffect(() => {
-    getNumClassroom().then((data) => {
-      setIsNumberClassroom(data.num);
-    });
-  }, []);
+    const fetchData = async () => {
+      try {
+        const data = await getNumClassroom();
+        setIsNumberClassroom(data.num);
+      } catch (error) {
+        console.error("Failed to fetch data: ", error);
+      }
+    };
+
+    fetchData();
+  }, []);;
 
   const [isNumberSubject, setIsNumberSubject] = useState(0);
   useEffect(() => {
-    getNumSubject().then((data) => {
-      setIsNumberSubject(data.num);
-    });
+    const fetchData = async () => {
+      try {
+        const data = await getNumSubject();
+        setIsNumberSubject(data.num);
+      } catch (error) {
+        console.error("Failed to fetch data: ", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   // Schedule ctn

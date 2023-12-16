@@ -222,6 +222,7 @@ export const downloadService = async (
             {
                 headers,
                 responseType: 'blob', // Set responseType to 'blob' to handle binary data
+                withCredentials: true,
             }
         );
         if (response.status >= 200 && response.status <= 210) {
