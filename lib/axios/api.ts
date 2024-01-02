@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 
-export const HOST_API = "http://localhost:8080/api";
+// export const HOST_API = "http://localhost:8080/api";
+export const HOST_API = "https://schedule-classes-production.up.railway.app/api";
 
 const handelError = (error: any) => {
     if (error.response) {
