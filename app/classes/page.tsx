@@ -21,12 +21,6 @@ const ClassesPage = () => {
     const dispatch = useDispatch();
     const useAppSelector = useSelector(selectSubject);
     const [isLoading, setIsLoading] = useState(true);
-    // const checkAuth = useSelector(selectAuth);
-    // const isAuth = checkAuth.isAuth;
-
-    // if (!isAuth) {
-    //     return <HomeNotLogin />;
-    // }
 
     // Pagination
     const [page, setPage] = useState(0);
@@ -41,6 +35,8 @@ const ClassesPage = () => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [createSubjectForm] = Form.useForm();
     const onFormSubjectCreateFinish = async (data: any) => {
+        setIsLoading(true);
+        setIsCreateModalOpen(false);
         try {
             await createSubject(data);
             toast.success("Create new subject success");
@@ -53,7 +49,7 @@ const ClassesPage = () => {
                 sort: ["id", "desc"],
                 name: filterStringify || "",
             }));
-            setIsCreateModalOpen(false);
+            setIsLoading(false);
         }
     }
     const handleCreateModalCancel = () => {
@@ -67,12 +63,15 @@ const ClassesPage = () => {
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [subjectDetail, setSubjectDetail] = useState<ISubjectOutputType>();
     const handleGetOnclick = async (id: number) => {
+        setIsLoading(true);
         try {
             const respone = await getDetailSubject(Number(id));
             setSubjectDetail(respone);
             setIsDetailModalOpen(true);
         } catch (error) {
             toast.error(String(error));
+        } finally {
+            setIsLoading(false);
         }
     }
     const handleDetailModalCancel = () => {
@@ -91,6 +90,8 @@ const ClassesPage = () => {
         setEditSubjectDetail(data);
     }
     const onFormEditFinish = async (data: any) => {
+        setIsLoading(true);
+        setIsEditModalOpen(false);
         try {
             await editSubject(editSubjectDetail?.id, data);
             toast.success("A subject is updated");
@@ -103,7 +104,7 @@ const ClassesPage = () => {
                 sort: ["id", "desc"],
                 name: filterStringify || "",
             }));
-            setIsEditModalOpen(false);
+            setIsLoading(false);
         }
     }
 
@@ -118,6 +119,8 @@ const ClassesPage = () => {
         setDeleteSubjectDetail(data);
     }
     const handleDeleteOk = async () => {
+        setIsLoading(true);
+        setIsDeleteModalOpen(false);
         try {
             await deleteSubject(Number(deleteSubjectDetail?.id));
             toast.success("Delete successfully!");
@@ -130,7 +133,7 @@ const ClassesPage = () => {
                 sort: ["id", "desc"],
                 name: filterStringify || "",
             }));
-            setIsDeleteModalOpen(false);
+            setIsLoading(false);
         }
     }
 

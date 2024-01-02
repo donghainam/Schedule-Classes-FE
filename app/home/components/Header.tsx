@@ -30,11 +30,6 @@ const Header = () => {
 
     const items: MenuProps['items'] = [
         {
-            label: <Link href="/setting">Setting</Link>,
-            icon: <ToolFilled />,
-            key: 'account1',
-        },
-        {
             label: <Link href="/home/password">Password</Link>,
             icon: <LockFilled />,
             key: 'account2',

@@ -26,9 +26,7 @@ export const HomeNotLogin = () => {
     }
     const onFormRegisterFinish = async (data: any) => {
         try {
-            console.log(">>>>>>>>CHecked", data);
             const newData = { ...data, email: data.email?.trim() };
-            console.log(">>>>>>>>CHecked", newData);
             await signUpApi(newData);
             toast.success("Register successfully");
         } catch (error) {

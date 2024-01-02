@@ -24,9 +24,9 @@ export const forgotPassword = (email: string) => {
         body: email,
     });
 };
-export const resetPassword = (key: string, newPassword: string) => {
-    return postService("/account/reset-password/finish", {
+export const resetPassword = (currentPassword: string, newPassword: string) => {
+    return postService("/account/change-password", {
         newPassword,
-        key,
+        currentPassword,
     });
 };

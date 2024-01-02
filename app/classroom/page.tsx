@@ -88,6 +88,8 @@ const ClassroomPage = () => {
         setIsDeleteModalOpen(false);
     }
     const onFormCreateFinish = async (data: any) => {
+        setIsLoading(true);
+        setIsCreateModalOpen(false);
         try {
             await createClassroom(data);
             toast.success("Create new classroom success");
@@ -101,9 +103,12 @@ const ClassroomPage = () => {
                 name: filterStringify || "",
             }));
             setIsCreateModalOpen(false);
+            setIsLoading(false);
         }
     }
     const onFormEditFinish = async (data: any) => {
+        setIsLoading(true);
+        setIsEditModalOpen(false);
         try {
             await editClassroom(editClassroomDetail?.id, data);
             toast.success("A classroom is updated");
@@ -116,10 +121,12 @@ const ClassroomPage = () => {
                 sort: ["id", "desc"],
                 name: filterStringify || "",
             }));
-            setIsEditModalOpen(false);
+            setIsLoading(false);
         }
     }
     const handleDeleteOk = async () => {
+        setIsLoading(true);
+        setIsDeleteModalOpen(false);
         try {
             await deleteClassroom(Number(deleteClassroomDetail?.id));
             toast.success("Delete successfully!");
@@ -132,7 +139,7 @@ const ClassroomPage = () => {
                 sort: ["id", "desc"],
                 name: filterStringify || "",
             }));
-            setIsDeleteModalOpen(false);
+            setIsLoading(false);
         }
     }
 
