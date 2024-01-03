@@ -1,7 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 
 // export const HOST_API = "http://localhost:8080/api";
-export const HOST_API = process.env.NEXT_PUBLIC_HOST_API + "/api";
+// export const HOST_API = process.env.NEXT_PUBLIC_HOST_API + "/api";
+export const HOST_API = "https://scheduleclasses.azurewebsites.net/api";
+
 
 const handelError = (error: any) => {
     if (error.response) {
