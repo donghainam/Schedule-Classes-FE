@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 
 // export const HOST_API = "http://localhost:8080/api";
-export const HOST_API = process.env.NEXT_PUBLIC_HOST_API;
+export const HOST_API = process.env.NEXT_PUBLIC_HOST_API + "/api";
 
 const handelError = (error: any) => {
     if (error.response) {
