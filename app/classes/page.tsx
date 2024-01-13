@@ -500,7 +500,6 @@ const ClassesPage = () => {
                         onFinish={onFormEditFinish}
                         autoComplete="off"
                     >
-                        {editSubjectDetail.name}
                         <div className={styles.containerField}>
                             <div className={styles.titleField}>Semester:</div>
                             <Form.Item<ISubjectInputType>
