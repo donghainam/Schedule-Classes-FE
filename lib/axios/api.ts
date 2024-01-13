@@ -40,9 +40,8 @@ export const postService = async (
             `${HOST_API + url}`,
             JSON.stringify(body),
             { headers }
-        ); console.log("Check response: ", response.data);
+        );
         if (response.status >= 200 && response.status <= 210) {
-            console.log("Check response: ", response.data);
             return response.data;
         }
     } catch (error: any) {

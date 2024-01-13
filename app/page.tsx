@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getNumClassroom } from "@/lib/redux/slices/classroomSlice/api";
 import { getNumSubject } from "@/lib/redux/slices/subjectSlice/api";
-import { Button, Input } from "antd";
+import { Button, Input, InputNumber } from "antd";
 import { toast } from "react-toastify";
 import Loading from "./home/components/Loading";
 import { getSchedule } from "@/lib/redux/slices/scheduleSlice/api";
@@ -48,14 +48,20 @@ export default function HomePage() {
   }, []);
 
   // Schedule ctn
-  const [isSemester, setIsSemester] = useState("20231");
+  const [isSemester, setIsSemester] = useState("20232");
+  const [isNumberDayPerWeek, setIsNumberDayPerWeek] = useState(5);
   const handleInputSemesterChange = (data: any) => {
     setIsSemester(data.target.value);
-  }
+  };
+  const handleInputNumberDayPerWeek = (value: number | null) => {
+    if (value !== null) {
+      setIsNumberDayPerWeek(value);
+    }
+  };
   const handleScheduleOnClick = async () => {
     setIsLoading(true);
     try {
-      const response = await getSchedule(isSemester);
+      const response = await getSchedule(isSemester, isNumberDayPerWeek);
 
       // Create a Blob URL from the response data
       const blobUrl = URL.createObjectURL(new Blob([response.data]));
@@ -118,14 +124,28 @@ export default function HomePage() {
           </div>
 
           <div className={styles.schedule}>
-            Enter the semester to schedule: <Input
-              size="large"
-              placeholder="Semester"
-              defaultValue={"20231"}
-              className={styles.scheinput}
-              required
-              onChange={handleInputSemesterChange}
-            />
+            <div className={styles.titlesche}>Scheduling algorithm</div>
+            <div className={styles.scheinput}>
+              Enter the semester to schedule:
+              <Input
+                size="large"
+                placeholder="Semester"
+                defaultValue={"20232"}
+                className={styles.scheinputbox}
+                required
+                onChange={handleInputSemesterChange}
+              />
+            </div>
+            <div className={styles.scheinputnumber}>
+              Enter the number of school days per week:
+              <InputNumber
+                min={1}
+                max={6}
+                defaultValue={5}
+                className={styles.scheinputnumberbox}
+                onChange={handleInputNumberDayPerWeek}
+              />
+            </div>
             <Button
               type="primary"
               className={styles.schebutton}

@@ -12,7 +12,6 @@ const Loading = (props: IProps) => {
                 spinning={props.show}
                 size="large"
                 className={styles.loadingPage}
-                tip="Loading: ........"
                 fullscreen
             >
                 <div className="content" />

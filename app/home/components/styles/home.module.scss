@@ -59,12 +59,34 @@ $header-color-deep: #eee;
         padding: 20px;
         background-color: #eee;
 
+        .titlesche {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
         .scheinput {
-            width: 86px;
+            width: 50%;
+            justify-content: space-between;
+
+            .scheinputbox {
+                width: 86px;
+                margin-left: 86px;
+            }
+        }
+
+        .scheinputnumber {
+            margin-top: 15px;
+            width: 50%;
+            justify-content: space-between;
+
+            .scheinputnumberbox {
+                width: 53px;
+                margin-left: 9px;
+            }
         }
 
         .schebutton {
-            margin-left: 20px;
+            margin-top: 20px;
         }
     }
 }
