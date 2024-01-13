@@ -452,6 +452,7 @@ const ClassesPage = () => {
                         <p className={styles.textContent}><div className={styles.detailModalTitle}>Class: </div>{subjectDetail.classNote}</p>
                         <p className={styles.textContent}><div className={styles.detailModalTitle}>Start week: </div>{subjectDetail.startWeek}</p>
                         <p className={styles.textContent}><div className={styles.detailModalTitle}>Number of lesson: </div>{subjectDetail.numberOfLessons}</p>
+                        <p className={styles.textContent}><div className={styles.detailModalTitle}>Number of week study: </div>{subjectDetail.numberOfWeekStudy}</p>
                         <p className={styles.textContent}><div className={styles.detailModalTitle}>Week off: </div>{subjectDetail.weekOff}</p>
                     </div>
                 )}
