@@ -295,6 +295,7 @@ const ClassesPage = () => {
                             <Column title="Start week" dataIndex="startWeek" key="startWeek" width={100} />
                             <Column title="Number of lessons" dataIndex="numberOfLessons" key="numberOfLessons" width={100} />
                             <Column title="Number of week study" dataIndex="numberOfWeekStudy" key="numberOfWeekStudy" width={100} />
+                            <Column title="Week off" dataIndex="weekOff" key="weekOff" width={100} />
                             <Column
                                 title="Status"
                                 key="action"
@@ -379,7 +380,7 @@ const ClassesPage = () => {
                                 name="startWeek"
                                 initialValue={1}
                             >
-                                <InputNumber min={1} max={53} defaultValue={1} className={styles.inputNumberField} />
+                                <InputNumber min={1} max={53} className={styles.inputNumberField} />
                             </Form.Item>
                         </div>
                         <div className={styles.containerField}>
@@ -388,7 +389,7 @@ const ClassesPage = () => {
                                 name="totalNumberOfLessons"
                                 initialValue={15}
                             >
-                                <InputNumber min={1} defaultValue={15} className={styles.inputNumberField} />
+                                <InputNumber min={1} className={styles.inputNumberField} />
                             </Form.Item>
                         </div>
                     </div>
@@ -400,7 +401,7 @@ const ClassesPage = () => {
                                 name="conditions"
                                 initialValue={1}
                             >
-                                <InputNumber min={1} max={5} defaultValue={1} className={styles.inputNumberField} />
+                                <InputNumber min={1} max={5} className={styles.inputNumberField} />
                             </Form.Item>
                         </div>
                         <div className={styles.containerField}>
@@ -409,7 +410,7 @@ const ClassesPage = () => {
                                 name="numberOfLessons"
                                 initialValue={3}
                             >
-                                <InputNumber min={1} max={6} defaultValue={3} className={styles.inputNumberField} />
+                                <InputNumber min={1} max={6} className={styles.inputNumberField} />
                             </Form.Item>
                         </div>
                     </div>
@@ -421,6 +422,16 @@ const ClassesPage = () => {
                             name="departmentName"
                         >
                             <Input size='large' placeholder="Department name" />
+                        </Form.Item>
+                    </div>
+
+                    <div className={styles.containerField}>
+                        <div className={styles.titleField}>Week off:</div>
+                        <Form.Item<ISubjectInputType>
+                            className={styles.formInput}
+                            name="weekOff"
+                        >
+                            <Input size='large' placeholder="11,35" />
                         </Form.Item>
                     </div>
                 </Form>
@@ -441,7 +452,7 @@ const ClassesPage = () => {
                         <p className={styles.textContent}><div className={styles.detailModalTitle}>Class: </div>{subjectDetail.classNote}</p>
                         <p className={styles.textContent}><div className={styles.detailModalTitle}>Start week: </div>{subjectDetail.startWeek}</p>
                         <p className={styles.textContent}><div className={styles.detailModalTitle}>Number of lesson: </div>{subjectDetail.numberOfLessons}</p>
-                        <p className={styles.textContent}><div className={styles.detailModalTitle}>Number of week study: </div>{subjectDetail.numberOfWeekStudy}</p>
+                        <p className={styles.textContent}><div className={styles.detailModalTitle}>Week off: </div>{subjectDetail.weekOff}</p>
                     </div>
                 )}
             </Modal>
@@ -513,7 +524,6 @@ const ClassesPage = () => {
                                 <div className={styles.titleField}>Start week:</div>
                                 <Form.Item<ISubjectInputType>
                                     name="startWeek"
-                                    initialValue={1}
                                 >
                                     <InputNumber min={1} max={53} defaultValue={editSubjectDetail.startWeek} className={styles.inputNumberField} />
                                 </Form.Item>
@@ -522,7 +532,6 @@ const ClassesPage = () => {
                                 <div className={styles.titleField}>Total number of lesson:</div>
                                 <Form.Item<ISubjectInputType>
                                     name="totalNumberOfLessons"
-                                    initialValue={15}
                                 >
                                     <InputNumber min={1} defaultValue={editSubjectDetail.numberOfLessons * editSubjectDetail.numberOfWeekStudy} className={styles.inputNumberField} />
                                 </Form.Item>
@@ -534,7 +543,6 @@ const ClassesPage = () => {
                                 <div className={styles.titleField}>Conditions:</div>
                                 <Form.Item<ISubjectInputType>
                                     name="conditions"
-                                    initialValue={1}
                                 >
                                     <InputNumber min={1} max={5} defaultValue={editSubjectDetail.conditions} className={styles.inputNumberField} />
                                 </Form.Item>
@@ -543,7 +551,6 @@ const ClassesPage = () => {
                                 <div className={styles.titleField}>Number of lesson:</div>
                                 <Form.Item<ISubjectInputType>
                                     name="numberOfLessons"
-                                    initialValue={3}
                                 >
                                     <InputNumber min={1} max={6} defaultValue={editSubjectDetail.numberOfLessons} className={styles.inputNumberField} />
                                 </Form.Item>
@@ -556,7 +563,17 @@ const ClassesPage = () => {
                                 className={styles.formInput}
                                 name="departmentName"
                             >
-                                <Input size='large' placeholder="Department name" defaultValue={editSubjectDetail.departmentName} />
+                                <Input size='large' placeholder="Department name" />
+                            </Form.Item>
+                        </div>
+
+                        <div className={styles.containerField}>
+                            <div className={styles.titleField}>Week off:</div>
+                            <Form.Item<ISubjectInputType>
+                                className={styles.formInput}
+                                name="weekOff"
+                            >
+                                <Input size='large' placeholder="11,35" defaultValue={editSubjectDetail.weekOff} />
                             </Form.Item>
                         </div>
                     </Form>

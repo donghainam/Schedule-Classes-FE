@@ -11,6 +11,7 @@ export interface ISubjectOutputType {
     conditions: number;
     countWeekStudied: number;
     departmentName: string;
+    weekOff: string;
 }
 
 export interface ISubjectState {
@@ -31,6 +32,7 @@ export interface ISubjectInputType {
     semester: string;
     conditions: number;
     departmentName: string;
+    weekOff: string;
 }
 
 export interface INumberOfSubject {
