@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { ISubjectInputType, ISubjectOutputType } from "@/lib/redux/slices/subjectSlice/model";
 import { createSubject, deleteSubject, editSubject, getDetailSubject, getTemplate, postExcel } from "@/lib/redux/slices/subjectSlice/api";
 import Loading from "../home/components/Loading";
+import axios from "axios";
 
 const { Search } = Input;
 
@@ -89,6 +90,24 @@ const ClassesPage = () => {
         setIsEditModalOpen(true);
         setEditSubjectDetail(data);
     }
+    useEffect(() => {
+        if (editSubjectDetail) {
+            editSubjectForm.setFieldsValue({
+                semester: editSubjectDetail.semester,
+                name: editSubjectDetail.name,
+                classNote: editSubjectDetail.classNote,
+                courseCode: editSubjectDetail.courseCode,
+                startWeek: editSubjectDetail.startWeek,
+                totalNumberOfLessons: editSubjectDetail.numberOfLessons * editSubjectDetail.numberOfWeekStudy,
+                conditions: editSubjectDetail.conditions,
+                numberOfLessons: editSubjectDetail.numberOfLessons,
+                departmentName: editSubjectDetail.departmentName,
+                weekOff: editSubjectDetail.weekOff,
+            });
+        } else {
+            editSubjectForm.resetFields();
+        }
+    }, [editSubjectDetail, editSubjectForm]);
     const onFormEditFinish = async (data: any) => {
         setIsLoading(true);
         setIsEditModalOpen(false);
@@ -476,10 +495,12 @@ const ClassesPage = () => {
                             conditions: editSubjectDetail.conditions,
                             numberOfLessons: editSubjectDetail.numberOfLessons,
                             departmentName: editSubjectDetail.departmentName,
+                            weekOff: editSubjectDetail.weekOff,
                         }}
                         onFinish={onFormEditFinish}
                         autoComplete="off"
                     >
+                        {editSubjectDetail.name}
                         <div className={styles.containerField}>
                             <div className={styles.titleField}>Semester:</div>
                             <Form.Item<ISubjectInputType>
@@ -487,7 +508,7 @@ const ClassesPage = () => {
                                 name="semester"
                                 rules={[{ required: true, message: 'Please input semester!' }]}
                             >
-                                <Input size='large' placeholder="Semester" defaultValue={editSubjectDetail.semester} />
+                                <Input size='large' placeholder="Semester" />
                             </Form.Item>
                         </div>
                         <div className={styles.containerField}>
@@ -497,7 +518,7 @@ const ClassesPage = () => {
                                 name="name"
                                 rules={[{ required: true, message: 'Please input subject name!' }]}
                             >
-                                <Input size="large" placeholder="Subject name" defaultValue={editSubjectDetail.name} />
+                                <Input size="large" placeholder="Subject name" />
                             </Form.Item>
                         </div>
                         <div className={styles.containerField}>
@@ -507,7 +528,7 @@ const ClassesPage = () => {
                                 name="classNote"
                                 rules={[{ required: true, message: 'Please input subject note!' }]}
                             >
-                                <Input size='large' placeholder="Note" defaultValue={editSubjectDetail.classNote} />
+                                <Input size='large' placeholder="Note" />
                             </Form.Item>
                         </div>
                         <div className={styles.containerField}>
@@ -517,7 +538,7 @@ const ClassesPage = () => {
                                 name="courseCode"
                                 rules={[{ required: true, message: 'Please input subject code!' }]}
                             >
-                                <Input size='large' placeholder="Subject code" defaultValue={editSubjectDetail.courseCode} />
+                                <Input size='large' placeholder="Subject code" />
                             </Form.Item>
                         </div>
                         <div className={styles.justifyField}>
@@ -526,7 +547,7 @@ const ClassesPage = () => {
                                 <Form.Item<ISubjectInputType>
                                     name="startWeek"
                                 >
-                                    <InputNumber min={1} max={53} defaultValue={editSubjectDetail.startWeek} className={styles.inputNumberField} />
+                                    <InputNumber min={1} max={53} className={styles.inputNumberField} />
                                 </Form.Item>
                             </div>
                             <div className={styles.containerField}>
@@ -534,7 +555,7 @@ const ClassesPage = () => {
                                 <Form.Item<ISubjectInputType>
                                     name="totalNumberOfLessons"
                                 >
-                                    <InputNumber min={1} defaultValue={editSubjectDetail.numberOfLessons * editSubjectDetail.numberOfWeekStudy} className={styles.inputNumberField} />
+                                    <InputNumber min={1} className={styles.inputNumberField} />
                                 </Form.Item>
                             </div>
                         </div>
@@ -545,7 +566,7 @@ const ClassesPage = () => {
                                 <Form.Item<ISubjectInputType>
                                     name="conditions"
                                 >
-                                    <InputNumber min={1} max={5} defaultValue={editSubjectDetail.conditions} className={styles.inputNumberField} />
+                                    <InputNumber min={1} max={5} className={styles.inputNumberField} />
                                 </Form.Item>
                             </div>
                             <div className={styles.containerField}>
@@ -553,7 +574,7 @@ const ClassesPage = () => {
                                 <Form.Item<ISubjectInputType>
                                     name="numberOfLessons"
                                 >
-                                    <InputNumber min={1} max={6} defaultValue={editSubjectDetail.numberOfLessons} className={styles.inputNumberField} />
+                                    <InputNumber min={1} max={6} className={styles.inputNumberField} />
                                 </Form.Item>
                             </div>
                         </div>
@@ -574,7 +595,7 @@ const ClassesPage = () => {
                                 className={styles.formInput}
                                 name="weekOff"
                             >
-                                <Input size='large' placeholder="11,35" defaultValue={editSubjectDetail.weekOff} />
+                                <Input size='large' placeholder="11,35" />
                             </Form.Item>
                         </div>
                     </Form>

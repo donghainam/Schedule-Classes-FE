@@ -66,6 +66,16 @@ const ClassroomPage = () => {
         setIsEditModalOpen(true);
         setEditClassroomDetail(data);
     }
+    useEffect(() => {
+        if (editClassroomDetail) {
+            editClassroomForm.setFieldsValue({
+                name: editClassroomDetail.name,
+                maxSv: editClassroomDetail.maxSv,
+            });
+        } else {
+            editClassroomForm.resetFields();
+        }
+    }, [editClassroomDetail, editClassroomForm]);
     const handleDeleteOnclick = (data: any) => {
         setIsDeleteModalOpen(true);
         setDeleteClassroomDetail(data);
@@ -288,7 +298,7 @@ const ClassroomPage = () => {
                             name="name"
                             rules={[{ required: true, message: 'This field is required!' }]}
                         >
-                            <Input size="large" placeholder="Name classroom" defaultValue={editClassroomDetail.name} />
+                            <Input size="large" placeholder="Name classroom" />
                         </Form.Item>
                         <h3>Max student</h3>
                         <Form.Item<IInputClassroom>
@@ -296,7 +306,7 @@ const ClassroomPage = () => {
                             name="maxSv"
                             rules={[{ required: true, message: 'This field is required!' }]}
                         >
-                            <Input size='large' placeholder="Max student" defaultValue={editClassroomDetail.id} />
+                            <Input size='large' placeholder="Max student" />
                         </Form.Item>
                     </Form>
                 )}
